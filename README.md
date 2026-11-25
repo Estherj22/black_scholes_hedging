@@ -21,8 +21,37 @@ All data is simulated.
 
 **Does the code agree with the maths?**
 
-- Formula call price: FILL IN. Monte Carlo call price: FILL IN, with a standard error of FILL IN.
-- Put-call parity: FILL IN (the two sides matched to X decimal places).
+- ## Results
+
+**Does the code agree with the maths?**
+
+- Formula call price: 4.3576. Monte Carlo call price: 4.3627, with a standard error of 0.0144, so the two differ by about a third of a standard error.
+- Put-call parity: both sides came to 0.7472.
+- Greeks at the start: delta 0.5497, gamma 0.0396, vega 0.1979 (per percentage point of volatility).
+
+**Experiment A: rebalancing more often reduces risk (true volatility equals priced volatility)**
+
+| Rebalances | Mean profit | Standard deviation |
+|---|---|---|
+| 4 | -0.010 | 1.626 |
+| 16 | -0.002 | 0.863 |
+| 63 | -0.010 | 0.436 |
+| 252 | -0.003 | 0.219 |
+
+![Hedging profit and loss with few and many rebalances](hedging_pnl.png)
+
+**Experiment B: what if the true volatility differs from the one I priced with? (63 rebalances)**
+
+| True volatility | Mean profit | Standard deviation |
+|---|---|---|
+| 15% | 0.993 | 0.458 |
+| 20% | -0.000 | 0.432 |
+| 25% | -0.997 | 0.693 |
+| 30% | -1.996 | 1.129 |
+
+**Finding 1:** Rebalancing more often cut risk without changing the average outcome. Mean profit stayed close to zero at every frequency, but the standard deviation fell from 1.626 with 4 rebalances to 0.219 with 252. Each fourfold increase in rebalancing roughly halved the risk, consistent with risk falling with the square root of the number of rebalances. With 4 rebalances the standard deviation was about 37% of the 4.36 option price, and with 252 it was about 5%.
+
+**Finding 2:** The seller made money when the stock was calmer than the volatility they priced with, and lost money when it was wilder. Priced at 20%, mean profit was +0.993 at 15% real volatility, about zero at 20%, -0.997 at 25% and -1.996 at 30%. Every 5 percentage points moved profit by roughly 1.0, which matches the option's vega of 0.198 per point (0.198 x 5 is about 0.99). A hedged option seller is effectively short volatility. Risk also grew with real volatility: the standard deviation was 1.129 at 30%, against 0.432 at 20%.
 
 **Experiment A: rebalancing more often reduces risk (true volatility equals priced volatility)**
 
